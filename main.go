@@ -7,6 +7,7 @@ import (
 	"strings"
 	"text/template"
 
+	"github.com/gobuffalo/packr"
 	"github.com/jinzhu/inflection"
 )
 
@@ -24,15 +25,18 @@ func main() {
 	name := os.Args[1]
 	m := Module{name}
 
+	box := packr.NewBox("./templates")
+
 	files := []string{"codec.go", "genesis.go", "module.go", "handler.go", "keeper.go", "querier.go", "types.go"}
 
 	for _, moduleFilename := range files {
-		wd, err := os.Getwd()
+		moduleTemplateFilename := moduleFilename + ".tmpl"
+		filename, err := box.FindString(moduleTemplateFilename)
 		if err != nil {
 			log.Fatal(err)
+			return
 		}
-		moduleTemplateFilename := moduleFilename + ".tmpl"
-		t, err := template.New(moduleTemplateFilename).Funcs(funcMap).ParseFiles(wd + "/templates/" + moduleTemplateFilename)
+		t, err := template.New(moduleTemplateFilename).Funcs(funcMap).Parse(filename)
 		if err != nil {
 			log.Fatal(err)
 			return
