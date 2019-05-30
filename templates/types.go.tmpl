@@ -1,0 +1,21 @@
+package {{ .Name }}
+
+import (
+	"net/url"
+	"time"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
+)
+
+// Defines {{ .Name }} module constants
+const (
+	RouterKey    = ModuleName
+	QuerierRoute = ModuleName
+)
+
+// {{ .Name | title }} stores data about a {{ .Name }}
+type {{ .Name | title }} struct {
+	ID              int64
+	Creator         sdk.AccAddress
+	CreatedTime     time.Time
+}

@@ -3,47 +3,64 @@ package main
 import (
 	"log"
 	"os"
+	"path"
+	"strings"
 	"text/template"
+
+	"github.com/jinzhu/inflection"
 )
 
+// Module specifies the data needed to construct a module
 type Module struct {
 	Name string
 }
 
 func main() {
-	m := Module{"Post"}
-
-	// create a new template with data
-	tmpl := template.New("module")
-	tmpl, err := tmpl.Parse("Hello {{.Name}}")
-	if err != nil {
-		log.Fatal("Parse:", err)
-		return
+	funcMap := template.FuncMap{
+		"title":     strings.Title,
+		"pluralize": inflection.Plural,
 	}
 
-	// merge template with contents of m
-	err = tmpl.Execute(os.Stdout, m)
-	if err != nil {
-		log.Fatal("Execute: ", err)
-		return
-	}
+	name := os.Args[1]
+	m := Module{name}
 
-	// fmt.Println("Hello")
-	// f, err := os.Create("module.go")
-	// if err != nil {
-	// 	fmt.Println(err)
-	// 	return
-	// }
-	// l, err := f.WriteString("Hello World")
-	// if err != nil {
-	// 	fmt.Println(err)
-	// 	f.Close()
-	// 	return
-	// }
-	// fmt.Println(l, "bytes written successfully")
-	// err = f.Close()
-	// if err != nil {
-	// 	fmt.Println(err)
-	// 	return
-	// }
+	files := []string{"codec.go", "genesis.go", "module.go", "handler.go", "keeper.go", "querier.go", "types.go"}
+
+	for _, moduleFilename := range files {
+		wd, err := os.Getwd()
+		if err != nil {
+			log.Fatal(err)
+		}
+		moduleTemplateFilename := moduleFilename + ".tmpl"
+		t, err := template.New(moduleTemplateFilename).Funcs(funcMap).ParseFiles(wd + "/templates/" + moduleTemplateFilename)
+		if err != nil {
+			log.Fatal(err)
+			return
+		}
+
+		modulePath := path.Join("x", name)
+		err = os.MkdirAll(modulePath, os.ModePerm)
+		if err != nil {
+			log.Fatal(err)
+			return
+		}
+
+		f, err := os.Create(path.Join(modulePath, moduleFilename))
+		if err != nil {
+			log.Fatal(err)
+			return
+		}
+
+		err = t.Execute(f, m)
+		if err != nil {
+			log.Fatal("Execute: ", err)
+			return
+		}
+
+		err = f.Close()
+		if err != nil {
+			log.Println(err)
+			return
+		}
+	}
 }
