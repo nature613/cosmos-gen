@@ -24,7 +24,7 @@ func InitGenesis(ctx sdk.Context, keeper Keeper, data GenesisState) {
 // ExportGenesis exports the genesis state
 func ExportGenesis(ctx sdk.Context, keeper Keeper) GenesisState {
 	return GenesisState{
-		{{ .Name | title | pluralize }}: keeper.{{ .Name | title | pluralize }}(ctx),
+//		{{ .Name | title | pluralize }}: keeper.{{ .Name | title | pluralize }}(ctx),
 	}
 }
 
