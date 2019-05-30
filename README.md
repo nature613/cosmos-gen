@@ -13,3 +13,18 @@ go get -u github.com/shanev/cosmos-gen
 ```sh
 cosmos-gen claim
 ```
+
+This generates the following boilerplate files:
+
+```
+└── x
+    ├── claim
+    │   ├── codec.go
+    │   ├── genesis.go
+    │   ├── handler.go
+    │   ├── keeper.go
+    │   ├── module.go
+    │   ├── params.go
+    │   ├── querier.go
+    │   └── types.go
+```
