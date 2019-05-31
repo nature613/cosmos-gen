@@ -21,13 +21,18 @@ func main() {
 		"title":     strings.Title,
 		"pluralize": inflection.Plural,
 	}
-
 	name := os.Args[1]
-	m := Module{name}
-
+	module := Module{name}
 	box := packr.NewBox("./templates")
-
-	files := []string{"codec.go", "genesis.go", "module.go", "handler.go", "keeper.go", "querier.go", "types.go"}
+	files := []string{
+		"codec.go",
+		"genesis.go",
+		"module.go",
+		"handler.go",
+		"keeper.go",
+		"querier.go",
+		"types.go",
+	}
 
 	for _, moduleFilename := range files {
 		moduleTemplateFilename := moduleFilename + ".tmpl"
@@ -41,26 +46,22 @@ func main() {
 			log.Fatal(err)
 			return
 		}
-
 		modulePath := path.Join("x", name)
 		err = os.MkdirAll(modulePath, os.ModePerm)
 		if err != nil {
 			log.Fatal(err)
 			return
 		}
-
 		f, err := os.Create(path.Join(modulePath, moduleFilename))
 		if err != nil {
 			log.Fatal(err)
 			return
 		}
-
-		err = t.Execute(f, m)
+		err = t.Execute(f, module)
 		if err != nil {
 			log.Fatal("Execute: ", err)
 			return
 		}
-
 		err = f.Close()
 		if err != nil {
 			log.Println(err)
