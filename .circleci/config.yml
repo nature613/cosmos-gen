@@ -11,7 +11,7 @@ jobs:
     parallelism: 2
     steps:
       - checkout
-      - restore_cache: # restores saved cache if no changes are detected since last run
+      - restore_cache:
           keys:
             - go-mod-v3-{{ checksum "go.sum" }}
       - run:
@@ -28,34 +28,30 @@ jobs:
           key: go-mod-v3-{{ checksum "go.sum" }}
           paths:
             - "/go/pkg/mod"
-          # Persist the specified paths (/tmp/cosmos-gen) into the workspace for use in downstream job.
       - persist_to_workspace:
-          # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
-          # taken to be the root directory of the workspace.
           root: bin
-          # Must be relative path from root
           paths:
             - cosmos-gen
-  # test:
-  #   executor: go
-  #   steps:
-  #     - attach_workspace:
-  #         at: /tmp/cosmos-gen/bin
-  #     - run:
-  #         name: Run test
-  #         command: |
-  #           ./bin/cosmos-gen claim
-  #     - run:
-  #         name: List generated files
-  #         command: |
-  #           pwd
-  #           ls -l ./x/claim/
+  test:
+    executor: go
+    steps:
+      - attach_workspace:
+          at: /tmp/cosmos-gen/bin
+      - run:
+          name: Run test
+          command: |
+            ./bin/cosmos-gen claim
+      - run:
+          name: List generated files
+          command: |
+            pwd
+            ls -l ./x/claim/
 workflows:
   build-flow:
     jobs:
       - build
-      # - test:
-      #     requires:
-      #       - build
+      - test:
+          requires:
+            - build
 
 
