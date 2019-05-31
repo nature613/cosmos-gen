@@ -1,6 +1,7 @@
 # cosmos-gen
 
 [![CircleCI](https://circleci.com/gh/shanev/cosmos-gen.svg?style=svg)](https://circleci.com/gh/shanev/cosmos-gen)
+[![Go Report Card](https://goreportcard.com/badge/github.com/shanev/cosmos-gen)](https://goreportcard.com/report/github.com/shanev/cosmos-gen)
 
 cosmos-gen generates boilerplate for building modules for [Cosmos SDK](https://github.com/cosmos/cosmos-sdk).
 
