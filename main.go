@@ -25,11 +25,7 @@ func main() {
 	name := os.Args[1]
 	module := Module{name}
 
-	dir, err := os.Getwd()
-	if err != nil {
-		log.Fatal(err)
-	}
-	box := packr.NewBox(path.Join(dir, "templates"))
+	box := packr.NewBox("./templates")
 
 	files := []string{
 		"codec.go",
