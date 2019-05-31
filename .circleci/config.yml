@@ -17,8 +17,8 @@ jobs:
       - run:
           name: Install linter
           command: |
-            GO111MODULE=on go get github.com/golangci/golangci-lint/cmd/golangci-lint@v1.16.0
-      - run: make buidl
+            GO111MODULE=on go get github.com/golangci/golangci-lint/cmd/golangci-lint@692dacb773b703162c091c2d8c59f9cd2d6801db
+      - run: make build-linux
       - run:
           name: List built binaries
           command: |
@@ -36,7 +36,26 @@ jobs:
           # Must be relative path from root
           paths:
             - cosmos-gen
+  # test:
+  #   executor: go
+  #   steps:
+  #     - attach_workspace:
+  #         at: /tmp/cosmos-gen/bin
+  #     - run:
+  #         name: Run test
+  #         command: |
+  #           ./bin/cosmos-gen claim
+  #     - run:
+  #         name: List generated files
+  #         command: |
+  #           pwd
+  #           ls -l ./x/claim/
 workflows:
   build-flow:
     jobs:
       - build
+      # - test:
+      #     requires:
+      #       - build
+
+

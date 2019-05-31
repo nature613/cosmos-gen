@@ -21,9 +21,16 @@ func main() {
 		"title":     strings.Title,
 		"pluralize": inflection.Plural,
 	}
+
 	name := os.Args[1]
 	module := Module{name}
-	box := packr.NewBox("./templates")
+
+	dir, err := os.Getwd()
+	if err != nil {
+		log.Fatal(err)
+	}
+	box := packr.NewBox(path.Join(dir, "templates"))
+
 	files := []string{
 		"codec.go",
 		"genesis.go",

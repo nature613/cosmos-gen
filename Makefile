@@ -11,12 +11,15 @@ check_lint:
 	golangci-lint run --verbose
 
 build:
-	go build -o ./bin/cosmos-gen *.go
+	packr build -o ./bin/cosmos-gen *.go
 
 buidl: build
 
 build-linux:
-	GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o ./bin/cosmos-gen *.go
+	go get -u github.com/gobuffalo/packr/packr
+	mkdir -p bin
+	GOOS=linux GOARCH=amd64 CGO_ENABLED=0 packr build && mv cosmos-gen ./bin/cosmos-gen
 
 install_tools_macos:
 	brew install golangci/tap/golangci-lint
+	go get -u github.com/gobuffalo/packr/packr
