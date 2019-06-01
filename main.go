@@ -7,7 +7,7 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/gobuffalo/packr"
+	packr "github.com/gobuffalo/packr/v2"
 	"github.com/jinzhu/inflection"
 )
 
@@ -25,7 +25,7 @@ func main() {
 	name := os.Args[1]
 	module := Module{name}
 
-	box := packr.NewBox("./templates")
+	box := packr.New("Cosmos Module Templates", "./templates")
 
 	files := []string{
 		"codec.go",
