@@ -1,9 +1,9 @@
-# cosmos-gen
+![logo](./logo.jpg)
+
+Cosmos Module Generator generates boilerplate for building [Cosmos SDK](https://github.com/cosmos/cosmos-sdk) modules.
 
 [![CircleCI](https://circleci.com/gh/shanev/cosmos-gen.svg?style=svg)](https://circleci.com/gh/shanev/cosmos-gen)
 [![Go Report Card](https://goreportcard.com/badge/github.com/shanev/cosmos-gen)](https://goreportcard.com/report/github.com/shanev/cosmos-gen)
-
-cosmos-gen generates boilerplate for building modules for [Cosmos SDK](https://github.com/cosmos/cosmos-sdk).
 
 ## Getting Started
 
