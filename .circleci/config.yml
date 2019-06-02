@@ -14,33 +14,31 @@ jobs:
       - restore_cache:
           keys:
             - go-mod-v3-{{ checksum "go.sum" }}
-      - run:
-          name: Install linter
-          command: |
-            GO111MODULE=on go get github.com/golangci/golangci-lint/cmd/golangci-lint@692dacb773b703162c091c2d8c59f9cd2d6801db
+      - run: make install-tools-linux
+      - run: make lint
       - run: make build-linux
       - run:
           name: List built binaries
           command: |
             pwd
-            ls -l ./bin/
+            ls -l cosmos-gen
       - save_cache:
           key: go-mod-v3-{{ checksum "go.sum" }}
           paths:
             - "/go/pkg/mod"
       - persist_to_workspace:
-          root: bin
+          root: .
           paths:
             - cosmos-gen
   test:
     executor: go
     steps:
       - attach_workspace:
-          at: /tmp/cosmos-gen/bin
+          at: /tmp/cosmos-gen
       - run:
           name: Run test
           command: |
-            ./bin/cosmos-gen claim
+            ./cosmos-gen claim
       - run:
           name: List generated files
           command: |
