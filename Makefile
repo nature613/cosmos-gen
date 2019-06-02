@@ -1,4 +1,5 @@
 GO_BIN ?= go
+OS := $(shell uname -s)
 
 install: deps
 	make build
@@ -8,24 +9,29 @@ tidy:
 	$(GO_BIN) mod tidy
 
 deps:
-	$(GO_BIN) get github.com/gobuffalo/packr/v2/packr2
+	$(GO_BIN) get -u github.com/gobuffalo/packr/v2/packr2
 	packr2 clean
 	make tidy
 
-lint:
-	golangci-lint run --verbose
-
 build:
+ifeq ($(OS), Darwin)
 	packr2 build -v .
+endif
+ifeq ($(OS), Linux)
+	GOOS=linux GOARCH=amd64 CGO_ENABLED=0 packr2 build -v .
+endif
 
 buidl: build
 
-build-linux:
-	$(GO_BIN) get -u github.com/gobuffalo/packr/v2/packr2
-	GOOS=linux GOARCH=amd64 CGO_ENABLED=0 packr2 build
+# --- Linting
+lint:
+	golangci-lint run --verbose
 
-install-tools-macos:
+install-lint:
+ifeq ($(OS), Darwin)
 	brew install golangci/tap/golangci-lint
-
-install-tools-linux:
+endif
+ifeq ($(OS), Linux)
 	GO111MODULE=on $(GO_BIN) get github.com/golangci/golangci-lint/cmd/golangci-lint@692dacb773b703162c091c2d8c59f9cd2d6801db
+endif
+# ---
