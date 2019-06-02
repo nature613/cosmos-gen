@@ -5,7 +5,14 @@ executors:
     docker:
       - image: circleci/golang:1.12
     working_directory: /tmp/cosmos-gen
-jobs: 
+jobs:
+  lint:
+    executor: go
+    parallelism: 2
+    steps:
+      - checkout
+      - run: make install-lint
+      - run: make lint
   build:
     executor: go
     parallelism: 2
@@ -14,9 +21,8 @@ jobs:
       - restore_cache:
           keys:
             - go-mod-v3-{{ checksum "go.sum" }}
-      - run: make install-tools-linux
-      - run: make lint
-      - run: make build-linux
+      - run: make deps
+      - run: make build
       - run:
           name: List built binaries
           command: |
@@ -47,6 +53,7 @@ jobs:
 workflows:
   build-flow:
     jobs:
+      - lint
       - build
       - test:
           requires:
