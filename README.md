@@ -5,7 +5,13 @@
 
 cosmos-gen generates boilerplate for building modules for [Cosmos SDK](https://github.com/cosmos/cosmos-sdk).
 
-## Install
+## Getting Started
+
+### Prerequisites
+
+[Go 1.12+](https://golang.org/doc/install)
+
+### Install
 
 ```sh
 go get -u github.com/shanev/cosmos-gen
@@ -31,3 +37,11 @@ This generates the following boilerplate files:
     │   ├── querier.go
     │   └── types.go
 ```
+
+## Built With
+
+* [Packr](https://github.com/gobuffalo/packr) - Pack templates into a single binary
+
+## Authors
+
+* **Shane Vitarana** - Initial work
