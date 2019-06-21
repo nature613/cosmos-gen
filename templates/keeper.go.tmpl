@@ -1,4 +1,17 @@
 package {{ .Name }}
 
 // Keeper is the model object for the package {{ .Name }} module
-type Keeper struct {}
+type Keeper struct {
+    storeKey   sdk.StoreKey
+	codec      *codec.Codec
+	paramStore params.Subspace
+}
+
+// NewKeeper creates a new keeper of the {{ .Name }} Keeper
+func NewKeeper(storeKey sdk.StoreKey, paramStore params.Subspace, codec *codec.Codec) Keeper {
+	return Keeper{
+		storeKey,
+		codec,
+		paramStore.WithKeyTable(ParamKeyTable()),
+	}
+}
